@@ -1,0 +1,27 @@
+{
+    "num_units": {
+        "_type": "choice",
+        "_value": [512]
+    },
+
+    "dropout_rate": {
+        "_type": "uniform",
+        "_value": [0.7, 0.9]
+    },
+    "lr":{
+        "_type": "choice",
+        "_value": [0.001, 0.003]
+    },
+    "activation": {
+        "_type": "choice",
+        "_value": ["sigmoid"]
+    },
+    "batch_size":{
+        "_type": "choice",
+        "_value": [64, 128, 256,512]
+    },
+    "num_layers":{
+        "_type": "choice",
+        "_value": [8]
+    }
+}

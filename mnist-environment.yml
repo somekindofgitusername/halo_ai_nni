@@ -1,0 +1,26 @@
+name: mnist_env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.8
+  - numpy=1.18.5
+  - pandas=1.3.3
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - pip
+  - pip:
+    - nni==1.7.1
+    - hyperopt==0.1.2
+    - tensorflow==2.3.0
+    - tensorboard==2.3.0
+    - dill
+    - tf2onnx==1.9.1
+    - onnx==1.7.0
+
+# you MUST install this manually after activating the environment
+# pip install protobuf==3.13.0
+
+# use this command to run:
+# nnictl stop ; nnictl create --config config.yml
