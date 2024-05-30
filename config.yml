@@ -7,7 +7,7 @@ trainingServicePlatform: local
 useAnnotation: false
 searchSpacePath: search_space.json
 tuner:
-  builtinTunerName: TPE
+  builtinTunerName: TPE # TPE, Random, Anneal, Evolution, SMAC, BatchTuner, NetworkMorphism, MetisTuner, GPTuner, RL
   classArgs:
     optimize_mode: maximize
 trial:

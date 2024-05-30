@@ -40,18 +40,18 @@ att_names = [
 # natural
 #FEATURE_COLUMNS = ["eyedirz","rcrossx","rcrossy","rcrossz","dot_eyedir_sundir", "altitude"]
 
-FEATURE_COLUMNS = ["rorientw", "rorientx", "rorienty", "rorientz",  "reyedirz", "altitude", "dot_eyedir_sundir", "azimuth"]
-
+#FEATURE_COLUMNS = ["rorientw", "rorientx", "rorienty", "rorientz",  "reyedirz", "altitude", "dot_eyedir_sundir", "azimuth"]
+#FEATURE_COLUMNS = ["orientw", "orientx", "orienty", "orientz", "eyedirx","eyediry","eyedirz", "altitude", "azimuth"]
 #FEATURE_COLUMNS = ["eyedirz","dot_eyedir_sundir", "altitude"]
 
 
 #FEATURE_COLUMNS = ["reyedirz", "rdot_eyedir_sundir", "altitude", "angle"]
-#FEATURE_COLUMNS = ["eyedirz","dot_eyedir_sundir", "altitude", "angle"]
+FEATURE_COLUMNS = ["eyedirz","dot_eyedir_sundir", "altitude", "angle"]
 
 
 FEATURE_COLUMNS.sort()
 
-#TARGET_COLUMNS = ['Cdx','Cdy','Cdz']
+TARGET_COLUMNS = ['Cdx','Cdy','Cdz']
 #TARGET_COLUMNS = ['Cdx']
 #TARGET_COLUMNS = ['hsvx']
 #TARGET_COLUMNS = ['hsvx', 'hsvy', 'hsvz']
@@ -62,7 +62,7 @@ FEATURE_COLUMNS.sort()
 #TARGET_COLUMNS = ['avgx', 'avgy', 'avgz']
 #TARGET_COLUMNS = ['avg3x', 'avg3y', 'avg3z']
 #TARGET_COLUMNS = ['navgx', 'navgy', 'navgz']
-TARGET_COLUMNS = ['avghsvx', 'avghsvy', 'avghsvz']
+#TARGET_COLUMNS = ['avghsvx', 'avghsvy', 'avghsvz']
 #TARGET_COLUMNS = ['avgxyzx', 'avgxyzy', 'avgxyzz']
 
 #TARGET_COLUMNS = []

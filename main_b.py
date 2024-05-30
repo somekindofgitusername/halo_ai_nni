@@ -10,9 +10,9 @@ import tf2onnx
 # FEATURE_COLUMNS = ["rorientw", "rorientx", "rorienty", "rorientz",  "reyedirz", "altitude", "dot_eyedir_sundir", "azimuth"]
 # TARGET_COLUMNS = ['Cdx','Cdy','Cdz']
 
-FILE_PATH = "attributes_test2.csv"
+FILE_PATH = "attributes_iso.csv"
 OUTPUT_FILE_PATH = "attributes_preprocessed.csv"
-ONNX_OUTPUT_PATH = "model.onnx"
+ONNX_OUTPUT_PATH = "model_Cd.onnx"
 
 def has_gpu():
     gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -37,7 +37,7 @@ def load_dataset():
     data = pd.read_csv(OUTPUT_FILE_PATH)
     
     # Shuffle the dataset
-    shuffled_data = data.sample(frac=1, random_state=42).reset_index(drop=True)
+    shuffled_data = data.sample(frac=1, random_state=41).reset_index(drop=True)
     
     features = shuffled_data[FEATURE_COLUMNS].values
     target = shuffled_data[TARGET_COLUMNS].values
@@ -51,7 +51,7 @@ def load_dataset():
     
     return (x_train, y_train), (x_test, y_test)
 
-def create_model(num_units, dropout_rate, lr, activation, num_layers=1):
+def create_model(num_units, dropout_rate, lr, activation, num_layers, optimizer, weight_decay):
     model = tf.keras.models.Sequential([
         tf.keras.layers.Flatten(input_shape=(len(FEATURE_COLUMNS),))
     ])
@@ -84,14 +84,18 @@ def train(params):
     activation = params.get('activation')
     batch_size = params.get('batch_size')
     num_layers = params.get('num_layers')
+    optimizer = params.get('optimizer')
+    weight_decay = params.get('weight_decay')
 
-    model = create_model(num_units, dropout_rate, lr, activation)
+    model = create_model(num_units, dropout_rate, lr, activation, num_layers, optimizer, weight_decay)
     (x_train, y_train), (x_test, y_test) = load_dataset()
 
     # Create TensorFlow dataset
     train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(batch_size)
     test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(batch_size)
     
+    early_stopping_callback = tf.keras.callbacks.EarlyStopping(monitor='val_mae', patience=35, restore_best_weights=True)
+        
     # Save the best model
     best_model_callback = tf.keras.callbacks.ModelCheckpoint(
         "best_model.h5", save_best_only=True, monitor='val_mae', mode='min'
@@ -100,8 +104,8 @@ def train(params):
     model.fit(
         train_dataset,
         validation_data=test_dataset,
-        epochs=40,
-        callbacks=[ReportIntResult(), best_model_callback],  # Make sure to include best_model_callback here
+        epochs=60,
+        callbacks=[ReportIntResult(), early_stopping_callback, best_model_callback],  # Make sure to include callbacks here
         verbose=2
     )
     _, acc = model.evaluate(test_dataset, verbose=0)
@@ -119,12 +123,14 @@ if __name__ == '__main__':
     print(f"y_train shape (targets): \t{y_train.shape}")
     
     params = {
-        'num_units': 32,
-        'dropout_rate': 0.1,
-        'lr': 0.001,
-        'activation': 'relu',
-        'batch_size': 32,
-        'num_layers': 4
+        'num_units': 128,
+        'dropout_rate': 0.451,
+        'lr': 0.01,
+        'activation': 'tanh',
+        'batch_size': 64,
+        'num_layers': 3,
+        'optimizer': 'adam',
+        'weight_decay': 1e-5
     }
 
     tuned_params = nni.get_next_parameter()
