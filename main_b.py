@@ -5,6 +5,7 @@ import tensorflow as tf
 import pandas as pd
 import nni
 import tf2onnx
+from tensorflow.keras.losses import Huber
 
 # Assuming FEATURE_COLUMNS and TARGET_COLUMNS are defined in your constants module or script
 # FEATURE_COLUMNS = ["rorientw", "rorientx", "rorienty", "rorientz",  "reyedirz", "altitude", "dot_eyedir_sundir", "azimuth"]
@@ -12,7 +13,7 @@ import tf2onnx
 
 FILE_PATH = "attributes_iso.csv"
 OUTPUT_FILE_PATH = "attributes_preprocessed.csv"
-ONNX_OUTPUT_PATH = "model_Cd.onnx"
+ONNX_OUTPUT_PATH = "model_avghsv.onnx"
 
 def has_gpu():
     gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -65,7 +66,8 @@ def create_model(num_units, dropout_rate, lr, activation, num_layers, optimizer,
     model.add(tf.keras.layers.Dense(len(TARGET_COLUMNS), activation='linear')) 
  
     model.compile(
-        loss='mean_squared_error',  # Use 'mean_squared_error' for regression, change if classification
+        #loss='mean_squared_error',  # Use 'mean_squared_error' for regression, change if classification
+        loss=Huber(),
         optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
         metrics=['mae']  # Mean Absolute Error for regression
     )

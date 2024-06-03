@@ -2,7 +2,7 @@ authorName: default
 experimentName: mnist
 trialConcurrency: 1
 maxExecDuration: 2h
-maxTrialNum: 50
+maxTrialNum: 150
 trainingServicePlatform: local
 useAnnotation: false
 searchSpacePath: search_space.json
